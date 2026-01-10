@@ -63,6 +63,7 @@ class ServiceProvider extends \Illuminate\Support\ServiceProvider
     protected function bootCommands()
     {
         $this->commands([
+            \Slides\Saml2\Commands\CreateCertificate::class,
             \Slides\Saml2\Commands\CreateTenant::class,
             \Slides\Saml2\Commands\UpdateTenant::class,
             \Slides\Saml2\Commands\DeleteTenant::class,

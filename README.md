@@ -64,6 +64,14 @@ php artisan migrate
 
 Once you publish `saml2.php` to `app/config`, you need to configure your SP. Most of options are inherited from [OneLogin Toolkit](https://github.com/onelogin/php-saml), so you can check documentation there.
 
+#### Service Provider Certificate Creation (SP certificate)
+
+```
+php artisan saml2:cert
+```
+
+Once you create the certificates, configure your SP `SAML2_SP_CERT_x509` and `SAML2_SP_CERT_PRIVATEKEY`.
+
 #### Identity Providers (IdPs)
 
 To distinguish between identity providers there is an entity called Tenant that represent each IdP.
