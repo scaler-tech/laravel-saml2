@@ -66,7 +66,7 @@ trait RendersTenants
             'Relay State URL' => $tenant->relay_state_url,
             'Name ID format' => $tenant->name_id_format,
             'x509 cert' => Str::limit($tenant->idp_x509_cert, 50),
-            'Metadata' => $this->renderArray($tenant->metadata ?: []),
+            'Metadata' => print_r($tenant->metadata ?: [],1),
             'Created' => $tenant->created_at->toDateTimeString(),
             'Updated' => $tenant->updated_at->toDateTimeString(),
             'Deleted' => $tenant->deleted_at ? $tenant->deleted_at->toDateTimeString() : null
@@ -91,23 +91,5 @@ trait RendersTenants
             'Logout URL: <comment>' . route('saml.logout', ['uuid' => $tenant->uuid]) . '</comment>',
             'Relay State: <comment>' . ($tenant->relay_state_url ?: config('saml2.loginRoute')) . ' (optional)</comment>'
         ]);
-    }
-
-    /**
-     * Print an array to a string.
-     *
-     * @param array $array
-     *
-     * @return string
-     */
-    protected function renderArray(array $array)
-    {
-        $lines = [];
-
-        foreach ($array as $key => $value) {
-            $lines[] = "$key: $value";
-        }
-
-        return implode(PHP_EOL, $lines);
     }
 }

@@ -27,7 +27,7 @@ class UpdateTenant extends \Illuminate\Console\Command
                             { --relayStateUrl= : Redirection URL after successful login }
                             { --nameIdFormat= : Name ID Format ("persistent" by default) }
                             { --x509cert= : x509 certificate (base64) }
-                            { --metadata= : A custom metadata }';
+                            { --metadata= : A custom metadata (JSON format) }';
 
     /**
      * The console command description.
@@ -65,6 +65,15 @@ class UpdateTenant extends \Illuminate\Console\Command
             return;
         }
 
+        $metadata = null;
+        if ($this->option('metadata')) {
+            $metadata = $this->option('metadata') ? \json_decode($this->option('metadata')) : null;
+            if (($json_error = \json_last_error_msg()) !== 'No error') {
+                $this->error($json_error);
+                return;
+            }
+        }
+
         $tenant->update(array_filter([
             'key' => $this->option('key'),
             'idp_entity_id' => $this->option('entityId'),
@@ -73,7 +82,7 @@ class UpdateTenant extends \Illuminate\Console\Command
             'idp_x509_cert' => $this->option('x509cert'),
             'relay_state_url' => $this->option('relayStateUrl'),
             'name_id_format' => $this->resolveNameIdFormat(),
-            'metadata' => ConsoleHelper::stringToArray($this->option('metadata'))
+            'metadata' => $metadata,
         ]));
 
         if(!$tenant->save()) {

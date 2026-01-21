@@ -28,7 +28,7 @@ class CreateTenant extends \Illuminate\Console\Command
                             { --relayStateUrl= : Redirection URL after successful login }
                             { --nameIdFormat= : Name ID Format ("persistent" by default) }
                             { --x509cert= : x509 certificate (base64) }
-                            { --metadata= : A custom metadata }';
+                            { --metadata= : A custom metadata (JSON) }';
 
     /**
      * The console command description.
@@ -82,7 +82,7 @@ class CreateTenant extends \Illuminate\Console\Command
         }
 
         $key = $this->option('key');
-        $metadata = ConsoleHelper::stringToArray($this->option('metadata'));
+        $metadata = $this->option('metadata') ? \json_encode($this->option('metadata')) : '[]';
 
         if($key && ($tenant = $this->tenants->findByKey($key))) {
             $this->renderTenants($tenant, 'Already found tenant(s) using this key');
