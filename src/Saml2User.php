@@ -13,6 +13,13 @@ use Slides\Saml2\Models\Tenant;
 class Saml2User
 {
     /**
+     * Parsed SAML user attributes exposed through property access for backwards compatibility.
+     *
+     * @var array<string, mixed>
+     */
+    protected $parsedAttributes = [];
+
+    /**
      * OneLogin authentication handler.
      *
      * @var OneLoginAuth
@@ -183,5 +190,42 @@ class Saml2User
     public function getTenant()
     {
         return $this->tenant;
+    }
+
+    /**
+     * Access parsed SAML attributes as virtual properties.
+     *
+     * @param string $name
+     *
+     * @return mixed|null
+     */
+    public function __get($name)
+    {
+        return $this->parsedAttributes[$name] ?? null;
+    }
+
+    /**
+     * Persist parsed SAML attributes as virtual properties.
+     *
+     * @param string $name
+     * @param mixed $value
+     *
+     * @return void
+     */
+    public function __set($name, $value)
+    {
+        $this->parsedAttributes[$name] = $value;
+    }
+
+    /**
+     * Determine whether a parsed SAML attribute has been set.
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        return isset($this->parsedAttributes[$name]);
     }
 }

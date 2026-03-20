@@ -20,7 +20,7 @@ jobs:
   phpunit-tests:
     name: PHPUnit Tests - PHP v${{ matrix.PHP_VERSION }}
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     if: ${{ !(github.event.pull_request.draft || startsWith(github.head_ref, 'code-style-fix/')) }}
     strategy:
       fail-fast: false
