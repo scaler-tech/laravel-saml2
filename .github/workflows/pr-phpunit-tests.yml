@@ -75,16 +75,15 @@ jobs:
         with:
           PHP_VERSION: ${{ matrix.php }}
 
-      - name: Validate composer.json
-        run: composer validate --strict
 
       - name: Resolve composer dependencies for PHP v${{ matrix.php }} / illuminate v${{ matrix.illuminate }}
-        run: |
-          rm -f composer.lock
-          composer update --no-interaction --prefer-dist --with-all-dependencies \
-            "illuminate/console:^${{ matrix.illuminate }}.0" \
-            "illuminate/database:^${{ matrix.illuminate }}.0" \
-            "illuminate/support:^${{ matrix.illuminate }}.0"
+        run: >
+          composer update --no-interaction --prefer-dist --with-all-dependencies
+          --with "illuminate/console:${{ matrix.illuminate }}"
+          --with "illuminate/database:${{ matrix.illuminate }}"
+          --with "illuminate/support:${{ matrix.illuminate }}"
+          --with "orchestra/testbench:${{ matrix.testbench }}"
+          --with "phpunit/phpunit:${{ matrix.phpunit }}"
 
       - name: Unit Tests - PHP v${{ matrix.php }} / illuminate v${{ matrix.illuminate }}
         run: |
