@@ -18,26 +18,74 @@ concurrency:
 
 jobs:
   phpunit-tests:
-    name: PHPUnit Tests - PHP v${{ matrix.PHP_VERSION }}
+    name: PHPUnit Tests - PHP v${{ matrix.php }} - illuminate v${{ matrix.illuminate }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
     if: ${{ !(github.event.pull_request.draft || startsWith(github.head_ref, 'code-style-fix/')) }}
     strategy:
       fail-fast: false
       matrix:
-        PHP_VERSION: [ '7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4', '8.5' ]
+        include:
+          - php: '7.3'
+            illuminate: '8'
+          - php: '7.4'
+            illuminate: '8'
+          - php: '8.0'
+            illuminate: '8'
+          - php: '8.0'
+            illuminate: '9'
+          - php: '8.1'
+            illuminate: '8'
+          - php: '8.1'
+            illuminate: '9'
+          - php: '8.1'
+            illuminate: '10'
+          - php: '8.2'
+            illuminate: '9'
+          - php: '8.2'
+            illuminate: '10'
+          - php: '8.2'
+            illuminate: '11'
+          - php: '8.2'
+            illuminate: '12'
+          - php: '8.3'
+            illuminate: '10'
+          - php: '8.3'
+            illuminate: '11'
+          - php: '8.3'
+            illuminate: '12'
+          - php: '8.3'
+            illuminate: '13'
+          - php: '8.4'
+            illuminate: '11'
+          - php: '8.4'
+            illuminate: '12'
+          - php: '8.4'
+            illuminate: '13'
+          - php: '8.5'
+            illuminate: '12'
+          - php: '8.5'
+            illuminate: '13'
     steps:
       - name: Check out code
         uses: actions/checkout@v4
 
-      - name: Prepare PHP Environment - PHP v${{ matrix.PHP_VERSION }}
+      - name: Prepare PHP Environment - PHP v${{ matrix.php }}
         uses: ./.github/actions/prepare-php-environment/
         with:
-          PHP_VERSION: ${{ matrix.PHP_VERSION }}
+          PHP_VERSION: ${{ matrix.php }}
 
-      - name: Install composer dependencies
-        uses: ramsey/composer-install@v3
+      - name: Validate composer.json
+        run: composer validate --strict
 
-      - name: Unit Tests - PHP v${{ matrix.PHP_VERSION }}
+      - name: Resolve composer dependencies for PHP v${{ matrix.php }} / illuminate v${{ matrix.illuminate }}
+        run: |
+          rm -f composer.lock
+          composer update --no-interaction --prefer-dist --with-all-dependencies \
+            "illuminate/console:^${{ matrix.illuminate }}.0" \
+            "illuminate/database:^${{ matrix.illuminate }}.0" \
+            "illuminate/support:^${{ matrix.illuminate }}.0"
+
+      - name: Unit Tests - PHP v${{ matrix.php }} / illuminate v${{ matrix.illuminate }}
         run: |
           php ./vendor/bin/phpunit --colors="always"
