@@ -200,6 +200,35 @@ protected $middlewareGroups = [
     ],
 ```
 
+On Laravel 11, the Kernel.php file is removed.
+Now, you can add the middleware on `config/app.php` like the example below:
+
+```php
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->group('saml', [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+        ]);
+    })
+```
+
+if you are using Laravel 11 behind a proxy, you may need to append trustProxies on last example `config/app.php`:
+
+```php
+    ->withMiddleware(function (Middleware $middleware) {
+        $middleware->group('saml', [
+            \Illuminate\Cookie\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+        ]);
+        
+        $middleware->trustProxies(at: [
+            'IP_FROM_YOUR_PROXY',
+        ]);
+    })
+```
+
 ### Logging out
 
 There are two ways the user can logout:
