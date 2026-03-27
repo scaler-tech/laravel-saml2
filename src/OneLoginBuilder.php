@@ -55,6 +55,10 @@ class OneLoginBuilder
             OneLoginUtils::setProxyVars(true);
         }
 
+        if ($this->app['config']->get('saml2.serverPort')) {
+            OneLoginUtils::setSelfPort($this->app['config']->get('saml2.serverPort'));
+        }
+
         $this->app->singleton('OneLogin_Saml2_Auth', function ($app) {
             $config = $app['config']['saml2'];
 

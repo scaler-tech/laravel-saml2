@@ -40,7 +40,6 @@ class Saml2Controller extends Controller
     public function acs(Auth $auth)
     {
         $errors = $auth->acs();
-
         if (!empty($errors)) {
             $error = $auth->getLastErrorReason();
             $uuid = $auth->getTenant()->uuid;

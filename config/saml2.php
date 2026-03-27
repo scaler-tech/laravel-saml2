@@ -142,6 +142,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Whether to force the server self port
+    |--------------------------------------------------------------------------
+    |
+    | If 'serverPort' is setted will get this one - Good in case your Laravel 
+    | application is behind a docker container using another port.
+    |
+    */
+
+    'serverPort' => env('APP_PORT'),	
+
+    /*
+    |--------------------------------------------------------------------------
     | Service Provider configuration.
     |--------------------------------------------------------------------------
     |
