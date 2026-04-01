@@ -3,6 +3,7 @@
 namespace Slides\Saml2\Commands;
 
 use Slides\Saml2\Repositories\TenantRepository;
+use Slides\Saml2\Models\TenantWithUuidInterface;
 
 /**
  * Class TenantCredentials
@@ -45,7 +46,15 @@ class TenantCredentials extends \Illuminate\Console\Command
      */
     public function handle()
     {
-        if (!$tenant = $this->tenants->findById($this->argument('id'))) {
+        $reflectionClass = new \ReflectionClass($this->tenants->getClass());
+
+        if ($reflectionClass->implementsInterface(TenantWithUuidInterface::class)) {
+            $tenant = $this->tenants->findByIdString($this->argument('id'));
+        } else {
+            $tenant = $this->tenants->findById($this->argument('id'));
+        }
+
+        if (!$tenant) {
             $this->error('Cannot find a tenant #' . $this->argument('id'));
 
             return;

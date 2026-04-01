@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Carbon\Carbon $updated_at
  * @property \Carbon\Carbon $deleted_at
  */
-class Tenant extends Model
+class Tenant extends Model implements TenantInterface
 {
     use SoftDeletes;
 

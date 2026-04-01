@@ -10,6 +10,24 @@ use Slides\Saml2\Models\Tenant;
 class TenantRepository
 {
     /**
+     * @var string
+     */
+    protected $class;
+
+    public function __construct()
+    {
+        $this->class = config('saml2.tenantModel', Tenant::class);
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass()
+    {
+        return $this->class;
+    }
+
+    /**
      * Create a new query.
      *
      * @param bool $withTrashed whether need to include safely deleted records
@@ -17,9 +35,8 @@ class TenantRepository
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function query(bool $withTrashed = false)
-    {
-        $class = config('saml2.tenantModel', Tenant::class);
-        $query = $class::query();
+    {   
+        $query = $this->class::query();
 
         if ($withTrashed) {
             $query->withTrashed();
@@ -79,6 +96,18 @@ class TenantRepository
      * @return \Illuminate\Database\Eloquent\Model|Tenant|null
      */
     public function findById(int $id, bool $withTrashed = true)
+    {
+        return $this->query($withTrashed)
+            ->where('id', $id)
+            ->first();
+    }
+
+    /**
+     * Find a tenant by ID as string. Like MongoDB
+     *
+     * @return \Illuminate\Database\Eloquent\Model|Tenant|null
+     */
+    public function findByIdString(string $id, bool $withTrashed = true)
     {
         return $this->query($withTrashed)
             ->where('id', $id)

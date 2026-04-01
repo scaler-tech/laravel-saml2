@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
 use OneLogin\Saml2\Auth as OneLoginAuth;
 use OneLogin\Saml2\Utils as OneLoginUtils;
-use Slides\Saml2\Models\Tenant;
+use Slides\Saml2\Models\TenantInterface;
 
 /**
  * Class OneLoginBuilder
@@ -20,7 +20,7 @@ class OneLoginBuilder
     /**
      * The resolved tenant.
      *
-     * @var Tenant
+     * @var TenantInterface
      */
     protected $tenant;
 
@@ -37,7 +37,7 @@ class OneLoginBuilder
      *
      * @return $this
      */
-    public function withTenant(Tenant $tenant)
+    public function withTenant(TenantInterface $tenant)
     {
         $this->tenant = $tenant;
 

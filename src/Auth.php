@@ -6,6 +6,7 @@ use OneLogin\Saml2\Auth as OneLoginAuth;
 use OneLogin\Saml2\Error as OneLoginError;
 use Slides\Saml2\Events\SignedOut;
 use Slides\Saml2\Models\Tenant;
+use Slides\Saml2\Models\TenantInterface;
 
 /**
  * Class Auth
@@ -22,14 +23,14 @@ class Auth
     /**
      * The resolved tenant.
      *
-     * @var Tenant
+     * @var Tenant|TenantInterface
      */
     protected $tenant;
 
     /**
      * Auth constructor.
      */
-    public function __construct(OneLoginAuth $auth, Tenant $tenant)
+    public function __construct(OneLoginAuth $auth, TenantInterface $tenant)
     {
         $this->base = $auth;
         $this->tenant = $tenant;
